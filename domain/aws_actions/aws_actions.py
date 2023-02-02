@@ -1,13 +1,11 @@
 import os
-
 import boto3 as boto3
 from botocore.exceptions import ClientError
 
 
 def find_valid_s3_prefix_dict(filename, prefix_dict):
     prefix_name = prefix_dict['prefix-name']
-    file_format = prefix_dict['file-format']
-    configured_name = f"{prefix_name}{filename}{file_format}"
+    configured_name = f"{prefix_name}/{filename}"
     if file_in_s3_bucket(configured_name):
         return prefix_dict
     else:
