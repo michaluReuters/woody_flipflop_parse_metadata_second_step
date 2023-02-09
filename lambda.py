@@ -11,7 +11,7 @@ client = boto3.client('events')
 
 @logger.inject_lambda_context(log_event=True)
 def handler(event, context):
-    dict_event = event['message']['detail']
+    dict_event = event['detail']
     name = dict_event['file_name']
 
     configuration_prefixes = appconfig.get_hosted_configuration_version(
@@ -23,12 +23,12 @@ def handler(event, context):
     prefixes = json.loads(configuration_prefixes)
 
     try:
-        valid_prefix_data = [find_valid_s3_prefix_dict(name, prefix) for prefix in prefixes]
+        valid_prefix_data_not_cleared = [find_valid_s3_prefix_dict(name, prefix) for prefix in prefixes]
+        valid_prefix_data = [i for i in valid_prefix_data_not_cleared if i is not None]
         valid_prefix = valid_prefix_data[0]['prefix-name']
         valid_file_format = valid_prefix_data[0]['file-format']
-        configured_file_name = f'{valid_prefix}/{name}{valid_file_format}'
 
-        dict_event['metadata_path'] = configured_file_name
+        dict_event['prefix'] = valid_prefix
 
         response_path = valid_file_format.replace('.', '')
 
