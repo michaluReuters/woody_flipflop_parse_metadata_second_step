@@ -9,6 +9,18 @@ s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
 
 
 def find_valid_s3_prefix_dict(filename, prefix_dict):
+    """
+    Searches for a file with the given `filename` in an S3 bucket, using a prefix defined in `prefix_dict`.
+
+    :param:
+        filename: The name of the file to search for in S3.
+        prefix_dict: A dictionary containing the S3 prefix to use for the search. The prefix must include the
+            directory name and the file format, with placeholders for the filename and file extension, respectively.
+
+    :return:
+        If a file with the specified name is found in the S3 bucket, returns the original `prefix_dict`. Otherwise,
+        returns `None`.
+    """
     logger.info(f"looking for a file: {filename} with prefix: {prefix_dict}")
     prefix_name = prefix_dict['prefix-name']
     prefix_extension = prefix_dict['file-format']
