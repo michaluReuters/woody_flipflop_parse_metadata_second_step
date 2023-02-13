@@ -19,7 +19,7 @@ def find_valid_s3_prefix_dict(filename, prefix_dict):
         pass
 
 
-def file_in_s3_bucket(file_name_sns) -> bool:
+def file_in_s3_bucket(file_name_sns, bucket=s3_bucket, bucket_name=s3_bucket_name) -> bool:
     """
     Checks if specified file exists in s3 bucket
 
@@ -30,9 +30,9 @@ def file_in_s3_bucket(file_name_sns) -> bool:
         bool: status
     """
 
-    logger.info(f"Searching for {file_name_sns} in {s3_bucket_name}")
+    logger.info(f"Searching for {file_name_sns} in {bucket_name}")
     try:
-        s3_bucket.Object(s3_bucket_name, f"{file_name_sns}").load()
+        bucket.Object(bucket_name, f"{file_name_sns}").load()
     except ClientError:
         logger.error(f"Could not find File {file_name_sns}")
         return False
