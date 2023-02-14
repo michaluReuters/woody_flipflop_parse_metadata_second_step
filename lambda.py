@@ -12,7 +12,7 @@ client = boto3.client('events')
 @logger.inject_lambda_context(log_event=True)
 def handler(event, context):
     dict_event = event['detail']
-    name = dict_event['file_name']
+    name = dict_event['name']
 
     configuration_prefixes = appconfig.get_hosted_configuration_version(
         ApplicationId=os.environ.get('APP_CONFIG_APP_ID'),
