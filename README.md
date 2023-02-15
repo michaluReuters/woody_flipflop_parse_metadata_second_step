@@ -29,7 +29,7 @@ find prefix under witch file can be found.
 Prefixes represent folders in S3 bucket that stores available metadata from many
 sources. They also are used to direct event bridge. Bellow is the example of
 prefixes configuration in AWS AppConfig:
-
+```json
     [
       {
         "prefix-name": "source1-metadata",
@@ -44,7 +44,7 @@ prefixes configuration in AWS AppConfig:
         "file-format": ".json"
       }
     ]
-
+```
 As we can see  the configuration is stored as a json file. Available prefix data
 also stores format of file that is contained within S3 and directs the path of
 EventBridge flow.
