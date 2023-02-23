@@ -7,6 +7,7 @@ from domain.aws_actions.aws_actions import find_valid_s3_prefix_dict
 logger = Logger()
 appconfig = boto3.client('appconfig')
 client = boto3.client('events')
+LAMBDA_NAME = os.environ["AWS_LAMBDA_FUNCTION_NAME"]
 
 
 @logger.inject_lambda_context(log_event=True)
@@ -34,8 +35,8 @@ def handler(event, context):
 
         data_str = json.dumps(dict_event)
         entry = {
-            'Source': f'new-ppe-sonyhivemetadata-step2-{response_path}-complete',
-            'Resources': ['new-ppe-sh-sonyhive-metadata-import-step2-lambda'],
+            'Source': f'{LAMBDA_NAME}-{response_path}-complete',
+            'Resources': [LAMBDA_NAME],
             'DetailType': 'metadata-step-complete',
             'Detail': data_str
         }
