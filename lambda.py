@@ -2,7 +2,7 @@ import boto3
 import json
 import os
 from aws_lambda_powertools import Logger
-from domain.aws_actions.aws_actions import find_valid_s3_prefix_dict
+from domain.aws_actions.aws_actions import find_valid_s3_prefix_dict, get_latest_configuration
 
 logger = Logger()
 appconfig = boto3.client('appconfig')
@@ -14,12 +14,7 @@ LAMBDA_NAME = os.environ["AWS_LAMBDA_FUNCTION_NAME"]
 def handler(event, context):
     dict_event = event['detail']
     name = dict_event['name']
-
-    configuration_prefixes = appconfig.get_hosted_configuration_version(
-        ApplicationId=os.environ.get('APP_CONFIG_APP_ID'),
-        ConfigurationProfileId=os.environ.get('APP_CONFIG_PREFIXES_ID'),
-        VersionNumber=int(os.environ.get('APP_CONFIG_PREFIXES_VERSION'))
-    )['Content'].read().decode('utf-8')
+    configuration_prefixes = get_latest_configuration()
 
     prefixes = json.loads(configuration_prefixes)
 

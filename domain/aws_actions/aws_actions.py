@@ -6,6 +6,7 @@ from aws_lambda_powertools import Logger
 logger = Logger()
 s3_bucket = boto3.resource("s3")
 s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
+appconfig = boto3.client('appconfigdata')
 
 
 def find_valid_s3_prefix_dict(filename, prefix_dict):
@@ -50,3 +51,24 @@ def file_in_s3_bucket(file_name_sns, bucket=s3_bucket, bucket_name=s3_bucket_nam
         return False
     logger.info(f"File has been found: {file_name_sns}")
     return True
+
+
+def get_latest_configuration():
+    """
+    This function gathers latest configuration in AWS App config
+
+    :return:
+        decoded configuration
+    """
+
+    token = appconfig.start_configuration_session(
+        ApplicationIdentifier=os.environ.get('APP_CONFIG_APP_ID'),
+        EnvironmentIdentifier=os.environ.get('APP_ENVIRONMENT'),
+        ConfigurationProfileIdentifier=os.environ.get('APP_CONFIG_PREFIXES_ID'),
+        RequiredMinimumPollIntervalInSeconds=20
+    )['InitialConfigurationToken']
+
+    response = appconfig.get_latest_configuration(
+        ConfigurationToken=token
+    )
+    return response['Configuration'].read().decode('utf-8')
