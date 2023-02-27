@@ -57,5 +57,5 @@ EventBridge flow.
 EV for this step represent configurations id's and names:
 - APP_CONFIG_APP_ID
 - APP_CONFIG_PREFIXES_ID
-- APP_CONFIG_PREFIXES_VERSION
+- APP_ENVIRONMENT
 - S3_BUCKET_NAME
